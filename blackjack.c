@@ -3,8 +3,11 @@
 #include <time.h>
 #include <unistd.h>
 
+
 #define num_cards 52
 #define upper_numer_of_cards 10
+
+
 
 
 char *card_names[] = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
@@ -164,7 +167,7 @@ void game_start() {
     printf("Total: %d\n", player_hand_value);
     printf("---------------------------------------");
 
-    int new_dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
+    int new_dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
     printf("\nDealer's Hand: ");
     print_hand(player_hand, numer_dealer_cards);
     printf("Total: %d\n", new_dealer_hand_value);
@@ -185,10 +188,12 @@ void game_start() {
             print_hand(player_hand, numer_player_cards);
             printf("Total: %d\n", player_hand_value);
             printf("---------------------------------------\n");
+            
         } 
             
         else if (player_responce == 'q' || player_responce == 'Q') {
             exit(0);
+            
         } 
             
         else if (player_responce == 's' || player_responce == 'S') {
@@ -222,22 +227,22 @@ void game_start() {
     
     if (player_hand_value > 21) {
         printf("You busted. The dealer won.\n");
-        system("./blackjack.c");
+
     }
         
     else if (dealer_hand_value > 21) {
         printf("Dealer busts! You win.\n");
-        system("./blackjack.c");
+
     } 
         
     else if (player_hand_value > dealer_hand_value) {
         printf("You had the greater hand value! You win!\n");
-        system("./blackjack.c");
+
     } 
         
     else {
         printf("The dealer's hand value was greater than (or equal to) your own. You lose.\n");
-        system("./blackjack.c");
+
     }
     
 }
@@ -245,9 +250,12 @@ void game_start() {
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
     while (1) {
         game_start();
+
+
+        
     }
     return 0;
 }
