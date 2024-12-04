@@ -50,7 +50,7 @@ void create_deck() {
 
 
 void shuffle_deck() {
-    srand(time(0)); 
+    srand(time(0) ^ getpid()); 
     int old_card_position;
     int new_card_position;
     int temporary_position;
@@ -133,32 +133,6 @@ int calculate_hand_value(int *hand, int numer_of_cards) {
 
 
 
-int new_calculate_hand_value(int *hand, int numer_of_cards) {
-    int total_hand_value = 0;
-    int aces = 0;
-    int card_item;
-
-    
-    for (card_item = 0; card_item < numer_of_cards - 1; card_item++) {
-        int card_pointer = hand[card_item];
-        total_hand_value += hand[card_item];
-        if (hand[card_pointer] == 11) {
-            aces++;
-        }
-    }
-
-    
-    while (total_hand_value > 21 && aces > 0) {
-        total_hand_value -= 10;
-        aces--;
-    }
-
-    
-    return total_hand_value;
-}
-
-
-
 void hit(int *hand, int *numer_of_cards) {
     hand[*numer_of_cards] = deck[deck_index++];
     (*numer_of_cards)++;
@@ -193,11 +167,18 @@ void game_start() {
     printf("Total: %d\n", player_hand_value);
     printf("---------------------------------------");
 
-    int dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
+    
     printf("\nDealer's Hand: ");
     print_hand(dealer_hand, numer_dealer_cards);
+    int dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
     printf("Total: %d\n", dealer_hand_value);
     printf("---------------------------------------\n");
+
+    dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
+    while (dealer_hand_value < 17) {
+        hit(dealer_hand, &numer_dealer_cards);
+        dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
+    }
 
 
     
@@ -235,11 +216,7 @@ void game_start() {
 
 
     
-    int dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
-    while (dealer_hand_value < 17) {
-        hit(dealer_hand, &numer_dealer_cards);
-        dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
-    }
+    
 
 
     
