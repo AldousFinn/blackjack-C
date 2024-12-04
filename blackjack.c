@@ -150,10 +150,21 @@ void hit(int *hand, int *numer_of_cards) {
     (*numer_of_cards)++;
 }
 
+void restart_game_values(){
+    deck_index = 0;
 
+    for (int i = 0; i < upper_numer_of_cards; i++){
+        player_hand[i] = 0;
+        dealer_hand[i] = 0;
+        numer_player_cards = 0;
+        numer_dealer_cards = 0;
+    }
+}
 
 
 void game_start() {
+
+
     printf("\n\n\n\nNEW GAME\n");
     printf("---------------------------------------");
 
@@ -226,21 +237,25 @@ void game_start() {
 
     
     if (player_hand_value > 21) {
+        restart_game_values();
         printf("You busted. The dealer won.\n");
-
+        
     }
         
     else if (dealer_hand_value > 21) {
+        restart_game_values();
         printf("Dealer busts! You win.\n");
 
     } 
         
     else if (player_hand_value > dealer_hand_value) {
+        restart_game_values();
         printf("You had the greater hand value! You win!\n");
 
     } 
         
     else {
+        restart_game_values();
         printf("The dealer's hand value was greater than (or equal to) your own. You lose.\n");
 
     }
@@ -250,12 +265,11 @@ void game_start() {
 
 
 
-int main(int argc, char *argv[]) {
-    while (1) {
+int main() {
+    while (1){
+        restart_game_values();
         game_start();
 
-
-        
     }
     return 0;
 }
