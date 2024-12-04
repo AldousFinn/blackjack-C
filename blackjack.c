@@ -81,6 +81,20 @@ void print_hand(int *hand, int numer_of_cards) {
 
 
 
+void new_print_hand(int *hand, int numer_of_cards) {
+    int item;
+    for (item = 0; item < numer_of_cards; item++) {
+        int card_pointer = hand[item];
+        printf("%s %s", card_names[card_pointer % 13], card_suits[card_pointer / 13]);
+        if (item < numer_of_cards - 1) {
+            printf(", ");
+            
+        }
+    }
+    printf(" || ");
+}
+
+
 
 void deal_start_cards() {
     player_hand[0] = deck[deck_index++];
@@ -101,7 +115,7 @@ int calculate_hand_value(int *hand, int numer_of_cards) {
     
     for (card_item = 0; card_item < numer_of_cards; card_item++) {
         int card_pointer = hand[card_item];
-        total_hand_value += hand[card_item];
+        total_hand_value += card_values[card_pointer];
         if (card_values[card_pointer] == 11) {
             aces++;
         }
@@ -156,9 +170,10 @@ void restart_game_values(){
     for (int i = 0; i < upper_numer_of_cards; i++){
         player_hand[i] = 0;
         dealer_hand[i] = 0;
-        numer_player_cards = 0;
-        numer_dealer_cards = 0;
+        
     }
+    numer_player_cards = 0;
+    numer_dealer_cards = 0;
 }
 
 
@@ -178,10 +193,10 @@ void game_start() {
     printf("Total: %d\n", player_hand_value);
     printf("---------------------------------------");
 
-    int new_dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
+    int dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
     printf("\nDealer's Hand: ");
-    print_hand(player_hand, numer_dealer_cards);
-    printf("Total: %d\n", new_dealer_hand_value);
+    print_hand(dealer_hand, numer_dealer_cards);
+    printf("Total: %d\n", dealer_hand_value);
     printf("---------------------------------------\n");
 
 
@@ -220,10 +235,10 @@ void game_start() {
 
 
     
-    int dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
+    int dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
     while (dealer_hand_value < 17) {
         hit(dealer_hand, &numer_dealer_cards);
-        dealer_hand_value = calculate_hand_value(dealer_hand, numer_dealer_cards);
+        dealer_hand_value = new_calculate_hand_value(dealer_hand, numer_dealer_cards);
     }
 
 
@@ -237,25 +252,25 @@ void game_start() {
 
     
     if (player_hand_value > 21) {
-        restart_game_values();
+
         printf("You busted. The dealer won.\n");
         
     }
         
     else if (dealer_hand_value > 21) {
-        restart_game_values();
+
         printf("Dealer busts! You win.\n");
 
     } 
         
     else if (player_hand_value > dealer_hand_value) {
-        restart_game_values();
+
         printf("You had the greater hand value! You win!\n");
 
     } 
         
     else {
-        restart_game_values();
+
         printf("The dealer's hand value was greater than (or equal to) your own. You lose.\n");
 
     }
